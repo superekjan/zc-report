@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>家庭网络质差报告</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+    :root {
+      --color-primary: #2563EB;
+      --color-primary-light: #DBEAFE;
+      --color-bg: #F0F7FF;
+      --color-surface: #FFFFFF;
+      --color-text: #0F172A;
+      --color-text-secondary: #475569;
+      --color-text-muted: #94A3B8;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      background: var(--color-bg);
+      color: var(--color-text-secondary);
+    }
+
+    .press { transition: transform 0.12s ease; }
+    .press:active { transform: scale(0.97); }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- 顶部 -->
+  <header class="bg-gradient-to-br from-blue-500 to-blue-700 text-white px-5 pt-10 pb-12 rounded-b-[2rem]">
+    <div class="max-w-md mx-auto">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/20 backdrop-blur">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+          </svg>
+        </span>
+        <h1 class="text-xl font-semibold">家庭网络质差报告</h1>
+      </div>
+      <p class="text-blue-100 text-sm leading-relaxed">点击下方报告类型，查看详细问题分析与解决方案。</p>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto px-5 -mt-6 pb-20">
+
+    <!-- 报告导航 -->
+    <section class="bg-white rounded-3xl p-5 shadow-lg shadow-blue-200/40">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1 h-4 bg-blue-600 rounded-full"></span>
+        <h2 class="text-sm font-semibold text-slate-900">质差类型报告</h2>
+      </div>
+
+      <div id="reportList" class="space-y-3">
+        <!-- 由 JS 生成 -->
+      </div>
+    </section>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    function renderList() {
+      const container = document.getElementById('reportList');
+      container.innerHTML = reports.map((r, i) => `
+        <a href="report.html?id=${r.id}" class="group press flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-100 hover:border-blue-200 transition fade-in" style="animation-delay: ${i * 0.05}s">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white text-blue-600 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            ${icon(r.icon, 'w-6 h-6')}
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <h3 class="text-sm font-semibold text-slate-900 truncate">${r.tags[0]}</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-medium border ${severityClass(r.severity)}">${severityText(r.severity)}</span>
+            </div>
+            <p class="text-xs text-slate-500 truncate">${r.subtitle || r.title}</p>
+          </div>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-slate-300 group-hover:text-blue-400 transition-colors">
+            <path d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      `).join('');
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
